@@ -1,53 +1,37 @@
 [[entries]]
-title = "info"
+title = "Basic Info"
 
   [[entries.entries]]
-  title = "a (nearly) no-CSS, fast, minimalist Hugo theme ported from <a href='https://github.com/riggraz/no-style-please'>riggraz/no-style-please</a>."
+  title = "This is my website/blog"
 
   [[entries.entries]]
-  title = "github repo"
-  url = "https://github.com/riggraz/no-style-please"
+  title = "3rd year undergrad math major @ CMU who likes Logic and PLT"
 
-  [[entries.entries]]
-  title = "used by <a href='https://riggraz.dev'>riggraz.dev</a> and <a href='https://github.com/riggraz/no-style-please/network/dependents'>many others</a>"
+[[entries.entries]]
+title = "Full about me"
+url = "about"
 
 [[entries]]
-title = "all posts"
+title = "Recent posts"
 
   [entries.post_list]
   limit = 5
   show_more = true
-  show_more_text = "See archive..."
+  show_more_text = "See all"
   show_more_url = "posts"
 
-[[entries]]
-title = "posts by category"
 
-  [entries.post_list]
-  section = "posts"
-  show_more = true
-  show_more_text = "See more posts..."
-  show_more_url = "posts"
 
 [[entries]]
-title = "rss"
-url = "index.xml"
-
-[[entries]]
-title = "another list"
+title = "Where to find me"
 
   [[entries.entries]]
-  title = "with subitems"
+  title = "arajeev [at] andrew [dot] cmu [dot] edu"
 
-    [[entries.entries.entries]]
-    title = "with subsubitems"
+  [[entries.entries]]
+  title = "Github"
+  url = "https://github.com/anishrajeev"
 
-    [[entries.entries.entries]]
-    title = "example page"
-    url = "about"
-
-[[entries]]
-title = "PRO TIP"
-entries = [
-   { title = "to edit this menu, edit data/menu.toml file" }
-  ]
+  [[entries.entries]]
+  title = "Twitter/X"
+  url = "https://twitter.com/anish_rajeev"
