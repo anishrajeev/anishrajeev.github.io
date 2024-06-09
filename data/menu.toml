@@ -5,10 +5,10 @@ title = "Basic Info"
   title = "This is my website/blog"
 
   [[entries.entries]]
-  title = "3rd year undergrad math major @ CMU who likes Logic and PLT"
+  title = "3rd year undergrad math major @ CMU interested in Logic and PLT"
 
 [[entries.entries]]
-title = "Full about me"
+title = "An actual about me"
 url = "about"
 
 [[entries]]
@@ -25,6 +25,9 @@ title = "Recent posts"
 [[entries]]
 title = "Where to find me"
 
+  [[entries.entries]]
+  title = "anish [dot] rajeev210 [at] gmail [dot] com"
+  
   [[entries.entries]]
   title = "arajeev [at] andrew [dot] cmu [dot] edu"
 
