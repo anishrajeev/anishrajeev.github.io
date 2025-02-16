@@ -5,11 +5,7 @@ title = "Basic Info"
   title = "This is my website/blog"
 
   [[entries.entries]]
-  title = "3rd year undergrad math major @ CMU interested in Logic and PLT"
-
-[[entries.entries]]
-title = "An actual about me"
-url = "about"
+  title = "Undergrad math major interested in math, logic, and theoretical computer science"
 
 [[entries]]
 title = "Recent posts"
