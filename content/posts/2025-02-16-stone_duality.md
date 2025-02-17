@@ -33,6 +33,7 @@ theory. The semantics will also be something you have likely internalized. We ca
 \(v : S\to 2\)(i.e. assigns every variable either \(0\) or \(1\)). Then, we define the interpetation of a formula inductively, as follows
 \[
 \begin{align*} 
+\usepackage{stmaryrd}
       \llbracket x \rrbracket &= v(x)\\
 	  \llbracket \varphi\wedge\psi \rrbracket &= \operatorname{min}(\llbracket\varphi\rrbracket, \llbracket\psi\rrbracket)\\
 	  \llbracket \varphi\vee\psi \rrbracket &= \operatorname{max}(\llbracket\varphi\rrbracket, \llbracket\psi\rrbracket)\\
