@@ -3,12 +3,19 @@
     extended=true
     min = "0.41.0"
 
+
 [markup]
   [markup.goldmark]
     [markup.goldmark.parser]
       [markup.goldmark.parser.attribute]
         block = true
         title = true
+  [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = [['\[', '\]'], ['$$', '$$']]
+          inline = [['\(', '\)']]
   [markup.highlight]
     anchorLineNos = false
     codeFences = true
@@ -29,6 +36,7 @@
     ordered = false
 
 [params]
+  math = true
   [params.theme_config]
     appearance = "auto"
     back_home_text = ".."
