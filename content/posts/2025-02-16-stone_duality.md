@@ -8,15 +8,36 @@ I am currently taking a class on categorical logic right now, and one thing that
 Stone's representation theorem.
 
 ## Traditional Valuations
-If you are familiar with propositional logic, you can skip this part. For a quick rundown/review, remember that a term in propositional logic is defined
-inductively as 
+If you are familiar with propositional logic, you can skip this part. We will do a quick rundown/review. Fix some set of variables \(S\). 
+We will define a formula over \(S\) inductively as 
 \[
 \begin{align*} 
-\varphi := &\varphi \wedge \psi\\
-                 &\varphi \vee \psi\\
-				 &\varphi \to  \psi\\
-				 &\top\\
-				 &\bot\\
-				 &\neg\varphi
+\varphi := &p 
+           &\varphi \wedge \psi\\
+           &\varphi \vee \psi\\
+		   &\varphi \to  \psi\\
+		   &\top\\
+		   &\bot\\
+		   &\neg\varphi
+\end{align*}
+\]
+We will say \(\neg\varphi\) is just shorthand for \(\varphi\to\bot\). A propositional theory is a set of variables, \(S\) and with a set of formulas \(A_{\mathbb{T}}\) that we call axioms. 
+# Example
+Take \(S = {p_i : i \in \mathbb{N}}\) and \(A_\mathbb{T} = p_i \vee p_j : i\neq j \in \mathbb{N}\). 
+
+# Syntax versus Semantics
+Throughout this whole post, I want to emphasize the seperation between syntax and semantics. Lets first look at syntax. Assuming that most of you are 
+familiar with classical logic(Modus Ponens, Law of Explosion, Proof by Contradiction(LEM), etc.). As such, I will spare actually writing out any of the rules
+because I am lazy to type up that much latex. Axioms will be things that can be proven from nothing. So, that will be the syntax interpretation of our 
+theory. The semantics will also be something you have likely internalized. We call an interpretation of \(A_{\mathbb{T}}\) as a function 
+\(v : S\to 2\)(i.e. assigns every variable either \(0\) or \(1\)). Then, we define the interpetation of a formula inductively, as follows
+\[
+\begin{align*} 
+      \llbracket x \llbracket^v &= v(x)\\
+	  \llbracket \varphi\wedge\psi \llbracket^v &= \operatorname{min}(\llbracket\varphi\llbracket^v, \llbracket\psi\llbracket^v)\\
+	  \llbracket \varphi\vee\psi \llbracket^v &= \operatorname{max}(\llbracket\varphi\llbracket^v, \llbracket\psi\llbracket^v)\\
+	  \llbracket \varphi\to\psi \llbracket^v &= \llbracket\varphi\llbracket^v \leq \llbracket\psi\llbracket^v\\
+	  \llbracket \top \llbracket^v &= 1\\
+	  \llbracket \bot \llbracket^v &= 0\\
 \end{align*}
 \]
