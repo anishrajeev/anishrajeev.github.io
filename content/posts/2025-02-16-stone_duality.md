@@ -33,11 +33,12 @@ theory. The semantics will also be something you have likely internalized. We ca
 \(v : S\to 2\)(i.e. assigns every variable either \(0\) or \(1\)). Then, we define the interpetation of a formula inductively, as follows
 \[
 \begin{align*} 
-      \llbracket x \llbracket^v &= v(x)\\
-	  \llbracket \varphi\wedge\psi \llbracket^v &= \operatorname{min}(\llbracket\varphi\llbracket^v, \llbracket\psi\llbracket^v)\\
-	  \llbracket \varphi\vee\psi \llbracket^v &= \operatorname{max}(\llbracket\varphi\llbracket^v, \llbracket\psi\llbracket^v)\\
-	  \llbracket \varphi\to\psi \llbracket^v &= \llbracket\varphi\llbracket^v \leq \llbracket\psi\llbracket^v\\
-	  \llbracket \top \llbracket^v &= 1\\
-	  \llbracket \bot \llbracket^v &= 0\\
+      \llbracket x \rrbracket &= v(x)\\
+	  \llbracket \varphi\wedge\psi \rrbracket &= \operatorname{min}(\llbracket\varphi\rrbracket, \llbracket\psi\rrbracket)\\
+	  \llbracket \varphi\vee\psi \rrbracket &= \operatorname{max}(\llbracket\varphi\rrbracket, \llbracket\psi\rrbracket)\\
+	  \llbracket \varphi\to\psi \rrbracket &= \llbracket\varphi\rrbracket \leq \llbracket\psi\rrbracket\\
+	  \llbracket \top \rrbracket &= 1\\
+	  \llbracket \bot \rrbracket &= 0\\
 \end{align*}
 \]
+ 
