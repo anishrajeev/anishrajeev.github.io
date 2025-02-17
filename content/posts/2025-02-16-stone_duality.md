@@ -12,7 +12,7 @@ If you are familiar with propositional logic, you can skip this part. For a quic
 inductively as 
 \[
 \begin{align*} 
-\varphi \coloneq &\varphi \wedge \psi\\
+\varphi := &\varphi \wedge \psi\\
                  &\varphi \vee \psi\\
 				 &\varphi \to  \psi\\
 				 &\top\\
@@ -20,4 +20,3 @@ inductively as
 				 &\neg\varphi
 \end{align*}
 \]
-This is an inline \(a^*=x-b^*\) equation.
