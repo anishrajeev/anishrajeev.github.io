@@ -1,4 +1,0 @@
-source "https://rubygems.org"
-
-gem "jekyll", "~> 4.0"  # Or the latest version of Jekyll
-gem "github-pages", group: :jekyll_plugins  # For GitHub Pages deployment
