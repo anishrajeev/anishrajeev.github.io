@@ -1,0 +1,95 @@
+<head>
+  <title>Anish's Awesome Blog</title>
+  <style>
+    body{
+	background-color:#576894;
+	background-attachment:fixed;
+	background-repeat: no-repeat;
+	background-size: cover;
+    }
+    .photo_div {
+	margin: auto;
+	width: 100%;
+	height: 100%;
+	background-image: url('../resources/background.jpg');
+	background-size: cover;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    }
+    .main_div {
+	text-align: center;
+	background-color: #FFF9EF;
+	color: #000;
+	opacity: 1;
+	height: 98%;
+	width: 60%;
+	margin: auto;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	overflow-y: auto;
+	align-items: center
+    }
+    .banner_div{
+	background: linear-gradient(180deg, #D7C186, #CFB56E);
+	color: white;
+	width: 100%;
+	height: 12%;
+	font-weight: bold;:
+	text-align: start;
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+	justify-content: space-between;
+    }
+    #banner_text  {
+	padding: 30px;
+	font-size: 35px;
+	font-family:TimesNewRoman
+		    
+    }
+    #banner_date {
+	padding: 0 30px 10px 30px;
+	font-size: 20px;
+	font-family:TimesNewRoman;
+	margin: 0;
+    }
+    .post{
+	flex-grow:1;
+	overflow-y: auto;
+	font-family:Baskerville;
+	font-size: 27px;
+	text-align: left;
+	width: 95%;
+	padding-bottom: 5%;
+    }
+    a:hover{
+	color: #4A90E2;
+	text-decoration: underline;
+    }
+    a{
+	color: #948357;
+	text-decoration: none;
+    }
+  </style>
+</head>
+
+
+<html>
+  <body>
+    <div class = "photo_div">
+      <div class = "main_div">
+	<div class = "banner_div">
+	  <p id="banner_text">The Ycombinator</p>
+	  <p id="banner_date">11/03/2023</p>
+	</div>
+	<div class = "post">
+	  <p>&nbsp;Richard Feynman famously said "The more you teach, the better you learn". I recently finished <a href="https://mitpress.mit.edu/9780262560993/the-little-schemer/?utm_term=&amp;utm_campaign=s23-subject-computer-google&amp;utm_source=adwords&amp;utm_medium=ppc&amp;hsa_acc=8539032139&amp;hsa_cam=20133831091&amp;hsa_grp=153045700725&amp;hsa_ad=677360455903&amp;hsa_src=g&amp;hsa_tgt=dsa-746619453332&amp;hsa_kw=&amp;hsa_mt=&amp;hsa_net=adwords&amp;hsa_ver=3&amp;gclid=Cj0KCQjwtJKqBhCaARIsAN_yS_lrNVkEzyd4v0LaXpKzNZrfJqoABc7LPO3oDkWlAzxHWvQwgNQS_3oaAoQxEALw_wcB">The Little Schemer</a>&nbsp;(<a href="https://www.goodreads.com/review/show/5950310328">my review</a>) in which I found some topics difficult to wrap my head around. So in an attempt to gain a better grasp, today I will be trying to explain one of these ideas: the YCombinator. Info on the YCombinator is shockingly difficult to find online, as the web only seems to rank searches about VC and hackernews, but basically the YCombinator is an implementation of recursion in languages with first class functions and no recursion. What is a first class function? More a property of a programming language, if a language has first class functions it means that you can declare anonymous functions, you can pass functions as arguments, functions can return other functions, and you can store functions in variables. It basically means that the language treats functions as "first class citizens". Languages like C and Java do not(as far as I know, there's always crazy workarounds on stackoverflow) have first class functions, while languages like Lisp and Haskell do.&nbsp;</p><p><span style="font-size: x-large;"><b>Motivation:</b></span></p><p>Why do we need to implement recursion? We already have languages that can recurse and do a bunch of other fancy whatnot, right? Well, for a long time academics studied how minimal can they make their languages while still maintaining certain abilities. As such, the YCombinator(invented by Haskell Curry) and other methods were devised to implement recursion in languages with recursion not enabled as a feature(for example, lambda calculus does not have recursion as it is all anonymous functions). This is an extremely counterintuitive idea that took some time for me to digest. You can implement recursion, something that seems like a core axiom/atom of nature, in a language without recursion?!</p><div style="text-align: left;"><span style="font-size: x-large;"><b>Scheme basics:</b></span></div><div style="text-align: left;">Before we get into deriving the YCombinator, we're going to review some Scheme basics incase you don't have any experience with scheme. Scheme has three main datatypes: S-expressions, lists, and atoms. atoms are the base of everything: things like 1, atom(yes atom itself is an atom), water, and book are atoms. Lists are defined as a collection of S-expressions; we denote lists in scheme without commas and with parenthesis. Some examples of lists are: (1 2 3), (atom), (), ((1 2 3) 2 ()), ((1)), and more. Finally, S-expressions are any atoms or lists. So any of the examples I listed above are indeed S-expressions.&nbsp;</div><div style="text-align: left;"><br /></div><div style="text-align: left;">To define anonymous functions, we use a list composed of 3 elements: the lambda keyword, a list of formal parameters(the arguments to the function), and the actual function itself. So, an example of the identity function would be <script src="https://gist.github.com/anishrajeev/3b3f2b2bb32affe7f80d6813f56b48e6.js"></script> Function application in scheme is always prefix notation, never infix notation. So an example of a method to add two numbers together would look like <script src="https://gist.github.com/anishrajeev/d8c421578dabe09ec4c6ca84281a7047.js"></script> We can ask questions about certain statements in Scheme. One such question we can ask is <b>zero? </b>When put in front of a number, it will evaluate to a boolean depending on whether the number is 0 or not. We use these questions, in addition with the <b>cond</b>&nbsp;statement,&nbsp;to control the control flow. The <b>cond</b>&nbsp;statement is a list of S-expressions, where the first item(we call this the "car" of the list) is the atom <b>cond</b>&nbsp;and the rest of the list(the tail, which in Scheme we call the "cdr" of the list) are pairs(list with two elements) where the first element evaluates to a boolean and the second element is an action to complete. For example, here is the function that says if a number is odd or even <script src="https://gist.github.com/anishrajeev/2cb5a60e0eceb869440b977875d3a921.js"></script> Finally, since Scheme does support recursion and it is the topic of discussion, here is the Fibonacci sequence in Scheme, using the <b>define</b>&nbsp;keyword</div><div style="text-align: left;"><br /></div><div style="text-align: left;"><span style="font-size: x-large;"><b>Derivation:</b></span></div><div style="text-align: left;">Ok, now that we are through the background section, here is where it gets heavy. Let's look back at the Fibonacci function</div><div style="text-align: left;">We want to be able to write this function with just anonymous functions(i.e. we want to write this function without using define).&nbsp; Let's attempt to first write fib1(?? is a blank; we don't know what to put there yet), a function that can handle the two base cases only <script src="https://gist.github.com/anishrajeev/dc6063302fa48efc5960853437b3ebc1.js"></script>&nbsp;As you can see, the function is only defined on n = 0 and n = 1(ergo the name fib1; going forward, fibn is defined on 0 through n), the two base cases of fibonacci. But the astute reader might have noted that we can in fact construct fib2 from this code, and fib3, fib4, fib5, etc. By replacing the ?? with the method itself, we have constructed fib2!</div><div style="text-align: left;"><script src="https://gist.github.com/anishrajeev/56476487c6a083c78a786f6ea05f5d8a.js"></script></div><div style="text-align: left;">We can keep replacing the ??s with fib1, each time increasing the amount of numbers it can handle(fib2 can handle up to n = 2, fib3 with n = 3, etc). But, we can never actually fully construct fib! Because there is a finite limit&nbsp; on the length of code(we can't have a function of infinite length), there will always be an input n where it breaks and reaches the ?? function. Replacing 2<sup>n</sup>&nbsp; ??s for fibn is going to get really annoying really quick. Let's instead try something different. We notice that we have a lot of repeated code. What if we create a new function, base fib, that takes in a function and uses it in our definition of fib0 instead of ??. Then, we can simply apply base fib to itself over and over! The following code snippet shows the creation of fib1, fib2, and fib3, but we can keep on continuing, creating a tower of infinite length, to get "recursion".<script src="https://gist.github.com/anishrajeev/e99f342a973245b04048a681a0da61d0.js"></script></div><div style="text-align: left;">This still isn't true recursion, though. It definitely is a lot cleaner than our previous approach. Something we have to keep in mind as we are working is that we're not creating recursion just for the fib method here. We want something bigger: we want a general solution for recursion, where you can pass in any function. Additionally, this doesn't really solve our problem of repeated code, does it. Let's try abstracting the base fib function out of this mess, and have another function do the work of applying them together.&nbsp; Let's call this function the wrapper function. We'll pass the wrapper function our fib function that we made in the last code block, and let the wrapper function do something with it.<script src="https://gist.github.com/anishrajeev/ad15d71c87bde8d921043bf05add28a9.js"></script></div><div style="text-align: left;">Hmm... This doesn't entirely feel right. That still is our fib1, but, we just got rid of the ??s. Let's not bring them back. Another observation we can make is that we can simulate what we did in the last code block(fibtower.scm) and pass fib to itself! We know that mk-fib, is actually the function fib. So, what if we pass mk-fib to itself! Here is fib2 and fib3, using just that approach.<script src="https://gist.github.com/anishrajeev/33dbdd3ff7e2644d7e1afadc08b25028.js"></script> That yielded good results. Again, not exactly recursion per se, but we are definitely getting there. The final step to get our code recursive is an extremely elegant move. Let's notice that our function fibn "dies" out if passed in n+1, because it reaches the last layer and it isn't passed in a function. It doesn't return anything; it is undefined on n+1. Well, what if we could somehow keep the function "alive" right before it dies. What if we could call the function fib again when it reaches this "death" state? This is what that would look like.<script src="https://gist.github.com/anishrajeev/3e65724e5b5bcdb6535e379ff765eebc.js"></script> Wow that's pretty. And it works! You can try it out for yourself.&nbsp; But, we aren't done yet; this isn't the general solution we want, and the "fib" function has lost it's "fib" characteristic! Well, if we look closely, we can see that the only thing that changed is that we've applied the parameter twice. Can we abstract that? Yes, we can! Here is what it would look like.&nbsp;<script src="https://gist.github.com/anishrajeev/af60d1e44a96a008cbf9854cc3d3505e.js"></script>Ok, we are so close. Now, let's take the anonymous original function OUT of the "wrapper" functions and we've got the YCombinator.<script src="https://gist.github.com/anishrajeev/fbf12a2a0f2d42113aaae04c1569ee7c.js"></script> Bam. If you try this out in your IDE right now(<a href="https://repl.it/">repl.it</a> has a scheme interpreter), you'll see that it works! The final step is just cleaning up the variable names. Here is the long awaited YCombinator!<script src="https://gist.github.com/anishrajeev/b2e92c3c6ff9ba5af31f23651ba8d607.js"></script>&nbsp; That completely anonymous function DEFINES recursion.</div><div style="text-align: left;"><br /></div><div style="text-align: left;"><span style="font-size: x-large;"><b>Fín</b></span></div><div style="text-align: left;">If you're confused, you can read this post again, or opt to read chapter 9 of The Little Schemer(Friedman explaints it better than I ever could). This 5 line function can be very confusing though, so give it some time. I suggest you open up your IDE of choice, close this blog, and derive the YCombinator on your own, using an example other than the fibonacci series. Some ideas of functions you can try it out with: length(length of a list; The Little Schemer used this example),&nbsp; power function, sum of a list, and more. The important part is that you actually work through this process, getting stuck and breaking out along the way. You can also write a blog about it too :)</div><div style="text-align: left;"><br /></div>
+	  </p>
+	</div>
+      </div>
+    </div>
+  </body>
+</html>
+ 
