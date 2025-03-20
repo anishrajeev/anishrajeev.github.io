@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Anish's Awesome Blog</title>
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+	    onload="renderMathInElement(document.body, { delimiters: [
+		    { left: '$$', right: '$$', display: true },
+		    { left: '$', right: '$', display: false },
+		    { left: '\\[', right: '\\]', display: true },
+		    { left: '\\(', right: '\\)', display: false }
+		    ] });"></script>
+    <style>
+      html, body {
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	  overflow: hidden;
+      }
+      body{
+	  background-color:#576894;
+	  background-attachment:fixed;
+	  background-repeat: no-repeat;
+	  background-size: cover;
+      }
+      .photo_div {
+	  margin: auto;
+	  width: 80%;
+	  height: 100%;
+	  background-image: url('../resources/background.jpg');
+	  background-size: cover;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+      }
+      .main_div {
+	  text-align: center;
+	  background-color: #FFF9EF;
+	  color: #000;
+	  opacity: 1;
+	  height: 98%;
+	  width: 60%;
+	  margin: auto;
+	  display: flex;
+	  justify-content: center;
+	  flex-direction: column;
+	  align-items: center;
+	  overflow-y: auto;
+      }
+      .banner_div{
+	  background: linear-gradient(180deg, #D7C186, #CFB56E);
+	  color: white;
+	  width: 100%;
+	  height: 12%;
+	  font-weight: bold;:
+				text-align: start;
+	  display: flex;
+	  align-items: center;
+	  flex-shrink: 0;
+	  justify-content: space-between;
+      }
+      #banner_text  {
+	  padding: 30px;
+	  font-size: 35px;
+	  font-family:TimesNewRoman
+		      
+      }
+      #banner_date {
+	  padding: 0 30px 10px 30px;
+	  font-size: 20px;
+	  font-family:TimesNewRoman;
+	  margin: 0;
+      }
+      .post{
+	  flex-grow:1;
+	  overflow-y: auto;
+	  font-family:Baskerville;
+	  font-size: 27px;
+	  text-align: left;
+	  width: 95%;
+	  padding-bottom: 5%;
+      }
+      a:hover{
+	  color: #4A90E2;
+	  text-decoration: underline;
+      }
+      a{
+	  color: #948357;
+	  text-decoration: none;
+      }
+      .svg_container {
+	  display: block;               /* Ensure it's treated as a block element */
+	  margin-left: auto;            /* Center it horizontally */
+	  margin-right: auto;           /* Center it horizontally */
+	  max-width: 100%;              /* Make it responsive to container size */
+	  height: auto; 
+	  }
+    </style>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+	  renderMathInElement(document.body, {
+              delimiters: [
+		  { left: "$$", right: "$$", display: true },
+		  { left: "$", right: "$", display: false },
+		  { left: "\\[", right: "\\]", display: true },
+      { left: "\\(", right: "\\)", display: false }
+              ]
+	  });
+      });
+    </script>
+    <div class = "photo_div">
+      <div class = "main_div">
+	<div class = "banner_div"> <p id="banner_text">The Stone Duality</p> <p id="banner_date">02/19/2025</p> </div>
+	<div class = "post">
+	  <br/>
+	  I am currently taking a class on categorical logic right now, and one thing that came as a surprise to me was the connection between logic, topology, and category theory. I think it forms a general topic under the name of "topos theory", but I'm not entirely sure. But something interesting we learned was about propositional logic and its connection to boolean algebras.
+	  In this post, my goal is to give a brief introduction into this connection, culminating in the Stone Duality theorem.
+	  </br></br>
+	  <b>Traditional Valuations:</b></br>
+	  I'm sure most of the audience of this post are familiar with propositional logic, but to formalize the exact ideas we are working with, I'll do a quick run down.
+	  Fix some set of variables \(S\). 
+	  We will define a formula over \(S\) inductively as 
+	  \[
+	  \begin{align*} 
+	  \varphi := &p\\
+          &\varphi \wedge \psi\\
+          &\varphi \vee \psi\\
+	  &\varphi \to  \psi\\
+	  &\top\\
+	  &\bot\\
+	  &\neg\varphi
+	  \end{align*}
+	  \]
+	  We say \(\neg\varphi\) is just shorthand for \(\varphi\to\bot\). A propositional theory is a set of variables, \(S\) and with a set of formulas \(A_{\mathbb{T}}\) that we call axioms.
+	  </br>
+	  <i>An Example: </i> </br>
+	  Take \(S = {p_i : i \in \mathbb{N}}\) and \(A_\mathbb{T} = \{p_i \vee p_j : i\neq j \in \mathbb{N}\}\). </br></br>
+
+	  <b>Syntax versus Semantics:</b></br>
+	  Throughout this whole post, I want to emphasize the seperation between syntax and semantics if that isn't clear yet. Lets first look at syntax. I'm going to assume that most of you are 
+	  familiar with classical logic and natural deduction (Modus Ponens, Law of Explosion, Proof by Contradiction/LEM, etc.)
+	  As such, I will not write out any of the rules(also I'm lazy) but just take it to be the normal provability rules you can use in classical math proofs.
+	  But something I wanted to talk about is the semantics. The semantics are independent from the syntax, as the semantics prescribes meaning, but the syntax tells us what we can deduce.
+	  We say a valuation is a function $v : S\to 2$. We can then extend the notion of a valuation to all formulas in our theory, as defined below.
+	  \[
+	  \begin{align*} 
+	  \llbracket x \rrbracket^v &= v(x)\\
+	  \llbracket \varphi\wedge\psi \rrbracket^v &= \operatorname{min}(\llbracket\varphi\rrbracket^v, \llbracket\psi\rrbracket^v)\\
+	  \llbracket \varphi\vee\psi \rrbracket^v &= \operatorname{max}(\llbracket\varphi\rrbracket^v, \llbracket\psi\rrbracket^v)\\
+	  \llbracket \varphi\to\psi \rrbracket^v &= \llbracket\varphi\rrbracket^v \leq \llbracket\psi\rrbracket^v\\
+	  \llbracket \top \rrbracket^v &= 1\\
+	  \llbracket \bot \rrbracket^v &= 0\\
+	  \end{align*}
+	  \]
+
+	  Finally, the last thing I wanted to define is a model. A model is just any valuation, $v$, such that $\forall x\in A_{\mathbb{T}}, \llbracket x\rrbracket^v = 1$.
+	  This poses the question: does our deduction system match our definition of semantics? This is the idea of soundness and completeness. Soudness says that our deductive system can
+	  not prove, and our completeness says that for every formula that has a model, there is a derivation of it.
+	  </br></br>
+	  <b> Boolean Algebras: </b></br>
+	  A boolean algebra is a set with some additional structure(just some algebraic structure). There is an element we call $0$ and an element called $1$. Additionally, there is the operators
+	  $\neg, \wedge, \vee$. Instead of listing out a bunch of axioms, which I reason is probably not very productive, I instead, will describe "how" the operators work.
+	  One can think of each connector as its corresponding logic gate, where $0$ is false and $1$ is true. So, we know things like $\neg\neg a = a$, $a\wedge(b\vee c) = (a\wedge b)\vee (a\wedge c)$, etc.
+	  And, we can actually notice that there is a lattice structure on the set.
+	  More explicitly, a boolean algebra is actually a poset(with some stronger properties): we say $a\leq b \iff a \wedge b = a$ or equivalently, $a\vee b = b$. <br/>
+	  If we have some function $f : B\to B'$, we call $f$ a boolean algebra homomorphism if
+	  \[
+	  \begin{align*}
+	  f(\neg x) &= \neg f(x)\\
+	  f(x\wedge y) &= f(x)\wedge f(y)\\
+	  f(x\vee y) &= f(x)\vee f(y)\\
+	  f(0) &= 0\\
+	  f(1) &= 1
+	  \end{align*}
+	  \]
+	  <i>An Example: </i> </br>
+	  Take the set $S = \{x, y, z\}$. Then, its power set $\mathcal{P}(S)$ is a boolean algebra, with $\neg, \wedge, \vee$
+	  corresponding to complement, intersection, and union respectively. If we wanted to think of it as a poset, we could think of
+	  $\subseteq$ as the relation. Here is that boolean algebra visualized below(an arrow from one node to another means it is
+	  less than it). </br>
+	  <img style="display: block; margin: auto" src="resources/stone_duality_boolean_lattice.svg" alt="Boolean Algebra Lattice" width="400" height="400"></br></br>
+	  <b> Free Finitely Generated Boolean Algebras: </b></br>
+	  We are going to briefly touch on freely generated boolean algebras, as they provide some context and intuition for the tools we will be working with. So, what exactly
+	  is a "free finitely generated boolean algebra"? The idea is that if we have some finite set $S$, we take $F(S)$ to be the free algebra over $S$ if no relations
+	  hold between elements other than what is provable through the axioms. In essence, it is the most unrestricted algebra over $S$. We can see that $F(0)$ is just
+	  the set $\{0, 1\}$. We want to generalize what $F(n)$ would be. To do so, we will provide the "Universal Mapping Property" of free boolean algebras. This is
+	  essentially just a way to define $F(S)$ by saying $F(S)$ is any object that exhibits this given property. Here is that property:
+	  <img style="display: block; margin: auto" src="resources/stone_duality_freealgebra_ump.svg" alt="Free Algebra UMP" width="400" height="400">
+	  Basically, this diagram says that the free boolean algebra over $S$ is the boolean algebra $F(S)$ such that for any function $v$ from $S$ to $2$, there
+	  is a unique function $f_v : F(S)\to 2$ such that $f_v\circ \eta = v$($\eta)$ is the "injection" function).
+	  So, how do we find an explicit construction of the free algebra? </br>
+	  Define a monomial as
+	  $$
+	  m_I = \bigwedge_{i\in S}
+	  \begin{cases} 
+	  i & i\in I\\
+	  \neg i & i\notin I
+	  \end{cases}
+	  $$
+	  So, I claim (verifiable by induction, not shown in this post) that every term in $F(S)$ is representable as $\bigvee_{j\in J} m_j$ where $J \subseteq \mathcal{P}(S)$. Specifically, if two sets
+	  $W, U \subseteq \mathcal{P}(S)$ are not equal, I claim the terms they create are different in $F(S)$, or in more clear terms, $F(S) \cong 2^{2^{|S|}}$. To see this, notice that if we have some
+	  $w \in \mathcal{P}(S)$, then we can establish a $f_w : F(S) \to 2$ where $f_w$ is that unique function corresponding to the valuation that sends everything in $w$ to $1$ and everything else to $0$
+	  (since it has to be a homomorphism, extending this constructively is self-explanatory). Take some $x = \bigvee_{j\in J} m_j$ with $J\subseteq \mathcal{P}(S)$. Then,
+	  $$f_w(x) = \begin{cases} 0 & w\notin J\\ 1 & w\in J\end{cases}$$
+	  This establishes its uniqueness, as for any element in $F(S)$ we can recover the $J$ that made it. </br>
+	  So why talk about this? Well, that isomoprhism is the first instance of the Stone Duality. You might be wondering where the topology comes in. As it turns out, the surjectiveness of the function is
+	  not something that is always true in the general case. Witnessing this specifically for the finite case helps provide some motivation when we later construct the topology. </br> </br>
+	  <b>Boolean Algebra Valued Models:</b></br>
+	  As we saw, the $2$ valued models we talked about earlier is actually a much more niche version of a more general concept. We can have boolean algebra valued models. We call an interpretation of
+	  a propositional theory $\mathbb{T} = (S, A_{\mathbb{T}})$ a function $v : S\to B$ for some boolean algebra $B$. We can then "interpret" formulas in our theory as before(inductively). We then
+	  call one of these interpretations a model, if it sends every formula in the set of axioms to $1_B$. We may wonder if there is some "ultimate" boolean algebra that has the essence of all other
+	  boolean algebras that are models, and the answer is yes. It is called the Lindenbaum–Tarski algebra, $\operatorname{LT}(\mathbb{T})$. It's the set of formulas mod
+	  some relation $\sim_{\mathbb{T}}$.
+	  We will define $\sim_{\mathbb{T}}$ as the relation where $\varphi \sim_{\mathbb{T}} \psi$ if $\phi$ and $\psi$ are provably equivalent(syntax wise). Note that $\operatorname{LT}(\mathbb{T})$ is itself a boolean algebra. If you know what a functor is, the Lindenbaum-Tarski algebra represents the functor
+	  $\operatorname{Mod}(\mathbb{T}, -)$.</br></br>
+	  <b> Functorial Semantics: </b></br>
+	  Functorial Semantics is a program to try to provide semantics through functors. Define the Hom-set between two sets as the set of all functions between the two sets.
+	  Functorial semantics can be observed by the fact that
+	  $$\operatorname{Hom}(\operatorname{LT}(\mathbb{T}), \operatorname{Mod}(\mathbb{T}, B)) \cong \operatorname{Mod}(\mathbb{T}, B)$$
+	  Specifically, for every $f$, we send it to $f : \operatorname{LT}(\mathbb{T}) \to B$ to $f\circ u$ where $u : S\to \operatorname{LT}(\mathbb{T})$
+	  just sends $p$ to $[p]$. $f\circ u$ will always send all axioms to $1$ as this is baked into "derivability". This was exactly the goal we set out to do when we constructed the Lindenbaum–Tarski algebra. We call $u$ the "universal model"
+	  of $\mathbb{T}$. </br></br>
+	  <b> Stone Representation Theorem: </b></br>
+	  Defne $\operatorname{Mod}(B)$ to be the set of all homomorphisms from $B$ to $2$. Then, the Stone Representation theorem says that the function
+	  $\eta : B\to 2^{\operatorname{Mod}(B)}$, given by $b \mapsto (f \mapsto f(b))$ is injective. This is a weaker conclusion than we came to for freely generated
+	  boolean algebras over finite sets. Recall, we concluded there that $F(S) \cong 2^{2^S} \cong 2^{\operatorname{Mod}(F(S))}$, so what gives? Well, it turns out that
+	  if we have $S \cong \mathbb{N}$, $\eta$ is actually not surjective! For a simple argument why, notice that $F(S)$ is countable(we can encode it) but
+	  $2^{2^S}$ is far from countable, so they can't possibly be isomorphic. We can actually visualize $2^{2^S}$ as an "infinite dimensional" cube. Each vertex/projection
+	  out of the cube represents some subset of $\operatorname{Mod}(F(S))$. So, every element of the boolean algebra corresponds to a vertex, namely the one representing
+	  the set of functions in $\operatorname{Mod}(B)$ that send it to $1$. So, we should try to restrict this space somehow. And that is where Stone Duality comes in.
+          </br></br>
+	  <b> Stone Duality: </b></br>
+	  
+	</div>
+      </div>
+    </div>
+  </body>
+</html>
+
