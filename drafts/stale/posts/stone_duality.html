@@ -7,6 +7,7 @@
 
     <!-- KaTeX JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://i.upmath.me/latex.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
 	    onload="renderMathInElement(document.body, { delimiters: [
 		    { left: '$$', right: '$$', display: true },
@@ -192,8 +193,24 @@
 	  is a "free finitely generated boolean algebra"? The idea is that if we have some finite set $S$, we take $F(S)$ to be the free algebra over $S$ if no relations
 	  hold between elements other than what is provable through the axioms. In essence, it is the most unrestricted algebra over $S$. We can see that $F(0)$ is just
 	  the set $\{0, 1\}$. We want to generalize what $F(n)$ would be. To do so, we will provide the "Universal Mapping Property" of free boolean algebras. This is
-	  essentially just a way to define $F(S)$ by saying $F(S)$ is any object that exhibits this given property. Here is that property:
-	  <img style="display: block; margin: auto" src="resources/stone_duality_freealgebra_ump.svg" alt="Free Algebra UMP" width="400" height="400">
+	  essentially just a way to define $F(S)$ by saying $F(S)$ is any object that exhibits this given property. Here is that property: </br>
+	  <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+	    <p style="text-align: center; margin: 0 auto;">
+	      $$
+              \[
+              \Huge
+              \begin{tikzcd}[]
+                S && 2 \\
+                \\
+                {F(S)}
+                \arrow["v", from=1-1, to=1-3]
+                \arrow["\eta"', from=1-1, to=3-1]
+                \arrow["{\exists!f_v}"', dashed, from=3-1, to=1-3]
+              \end{tikzcd}
+              \]
+	      $$
+	    </p>
+	  </div>
 	  Basically, this diagram says that the free boolean algebra over $S$ is the boolean algebra $F(S)$ such that for any function $v$ from $S$ to $2$, there
 	  is a unique function $f_v : F(S)\to 2$ such that $f_v\circ \eta = v$($\eta)$ is the "injection" function).
 	  So, how do we find an explicit construction of the free algebra? </br>

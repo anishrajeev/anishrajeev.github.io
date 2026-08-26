@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const posts = (await getCollection('posts', ({ data }) =>
+  data.status === 'published' || (!import.meta.env.PROD && data.status === 'draft')
+))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Base banner="Posts" description="Posts by Anish Rajeev.">
+  <nav class="post-index" aria-label="All posts">
+    <ul>
+      {posts.map((post) => (
+        <li>
+          <a href={`/posts/${post.id}.html`}>{post.data.title}</a>
+          {post.data.status === 'draft' && <small class="draft-label">(draft)</small>}
+        </li>
+      ))}
+    </ul>
+  </nav>
+</Base>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Anish's Awesome Blog</title>
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+	    onload="renderMathInElement(document.body, { delimiters: [
+		    { left: '$$', right: '$$', display: true },
+		    { left: '$', right: '$', display: false },
+		    { left: '\\[', right: '\\]', display: true },
+		    { left: '\\(', right: '\\)', display: false }
+		    ] });"></script>
+    <style>
+      .katex {
+	  font-size: 1em; /* Match the surrounding font size */
+      }
+      html, body {
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+      }
+      body{
+	  background-color:#576894;
+	  background-attachment:fixed;
+	  background-repeat: no-repeat;
+	  background-size: cover;
+      }
+      .photo_div {
+	  margin: auto;
+	  width: 80%;
+	  height: 100%;
+	  background-image: url('../resources/background.jpg');
+	  background-size: cover;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+      }
+      .main_div {
+	  text-align: center;
+	  background-color: #FFF9EF;
+	  color: #000;
+	  opacity: 1;
+	  height: 98%;
+	  width: 60%;
+	  margin: auto;
+	  display: flex;
+	  justify-content: center;
+	  flex-direction: column;
+	  align-items: center;
+	  overflow-y: auto;
+      }
+      .banner_div{
+	  background: linear-gradient(180deg, #D7C186, #CFB56E);
+	  color: white;
+	  width: 100%;
+	  height: 12%;
+	  font-weight: bold;:
+				text-align: start;
+	  display: flex;
+	  align-items: center;
+	  flex-shrink: 0;
+	  justify-content: space-between;
+      }
+      #banner_text  {
+	  padding: 30px;
+	  font-size: 35px;
+	  font-family:TimesNewRoman
+
+      }
+      #banner_date {
+	  padding: 0 30px 10px 30px;
+	  font-size: 20px;
+	  font-family:TimesNewRoman;
+	  margin: 0;
+      }
+      .post{
+	  flex-grow:1;
+	  overflow-y: auto;
+	  font-family:TimesNewRoman;
+	  font-size: 22px;
+	  text-align: left;
+	  width: 95%;
+	  padding-bottom: 5%;
+      }
+      a:hover{
+	  color: #4A90E2;
+	  text-decoration: underline;
+      }
+      a{
+	  color: #948357;
+	  text-decoration: none;
+      }
+      .svg_container {
+	  display: block;
+	  margin-left: auto;
+	  margin-right: auto;
+	  max-width: 100%;
+	  height: auto;
+	  overflow: visible;
+      }
+    </style>
+  </head>
+  <body>
+    <div class = "photo_div">
+      <div class = "main_div">
+	<div class = "banner_div"> <p id="banner_text">A Simple Introduction to Coinduction</p> <p id="banner_date">04/15/2025</p> </div>
+	<div class = "post">
+	  <br/>
+	  Most of the intended audience of this post are likely familiar with induction. This same likely cannot be said about coinduction, the dual of induction.
+	  My aim is to introduce coinduction  in a self-contained manner, with a focus on intuition. Then, at the end, apply coinductive reasoning to think about
+	  the correctness of an algorithm to check if a type is a subtype of another.</br></br>
+
+	  <b>Monotone Functions and Fix Points</b></br>
+	  Fix some universal set $\mathcal{U}$. We are going to study "monotone" functions from $\mathcal{P}(\mathcal{U})$ to itself, where we define a
+	  function $F$ as monotone if for some $X, Y \in \mathcal{P}(\mathcal{U}), X \subseteq Y$, then $F(X) \subseteq F(Y)$.
+
+	  Here, we&#39;re going to think of $\mathcal{U}$ as a universe set, containing all the objects we can build. We can then think of a monotone function $F$ as a way to specify
+	  rules: given a subset $Q \subseteq \mathcal{U}$, $F(Q)$ represents the maximum amount of things we can build with the items in $Q$.
+	  A concrete example will serve us well. Take $\mathcal{U} = \{A, B, C\}$. We can describe $F$ using the inference rules below</br>
+
+	  <img src="resources/inferencerules1.svg" alt="Inference Rules" class="svg_container" width="300">
+	  Then, we can see that $F$ would be defined as follows</br>
+	  <img src="resources/Fapplied.svg" alt="Inference Rules" class="svg_container" style="width=auto; height=auto;">
+	  We categorize subsets, $Q$, in relation to a function $F$ in 3 different ways: $F$-closed means $F(Q) \subseteq Q$, $F$-consistent means $Q \subseteq F(Q)$, and
+	  fixed point if $F(Q) = Q$. We have two fixed points in our example: $\{A\}$ is the smallest and $\{A, B, C\}$
+	  is the biggest. We&#39;re going to make these fixed points objects of interest for the rest of this post.
+
+
+
+	</div>
+      </div>
+    </div>
+  </body>
+</html>

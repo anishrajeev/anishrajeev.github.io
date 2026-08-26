@@ -1,1 +1,10 @@
 /posts/drafts/
+node_modules/
+dist/
+.astro/
+.DS_Store
+*~
+*.aux
+*.dvi
+*.log
+*.out

@@ -1,0 +1,19 @@
+---
+import Base from './Base.astro';
+import katexStylesheet from 'katex/dist/katex.min.css?url';
+
+interface Props {
+  title: string;
+  date: Date;
+  math?: boolean;
+}
+
+const { title, date, math = false } = Astro.props;
+---
+
+<Base title={title} banner={title} date={date}>
+  {math && <link slot="head" rel="stylesheet" href={katexStylesheet} />}
+  <article class="post">
+    <slot />
+  </article>
+</Base>
