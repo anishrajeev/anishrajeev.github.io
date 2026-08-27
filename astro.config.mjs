@@ -20,6 +20,7 @@ export default defineConfig({
     mdx(),
     svelte(),
     sitemap({
+      filter: (page) => !new URL(page).pathname.replace(/\.html$/, '').endsWith('/intutive_model_theory'),
       serialize(item) {
         const url = new URL(item.url);
         if (url.pathname !== '/' && !/\.[^/]+$/.test(url.pathname)) url.pathname += '.html';
@@ -33,7 +34,7 @@ export default defineConfig({
     rehypePlugins: [[rehypeKatex, { macros: katexMacros }]],
     shikiConfig: {
       theme: 'github-light',
-      wrap: true,
+      wrap: false,
     },
   },
   build: {

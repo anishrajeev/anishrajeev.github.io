@@ -30,47 +30,34 @@ async function findAnimation(postsRoot, slug, filename) {
   return (await stat(candidate).catch(() => null))?.isFile() ? candidate : null;
 }
 
-async function walk(directory, pattern) {
-  const found = [];
-  for (const entry of await readdir(directory, { withFileTypes: true }).catch(() => [])) {
-    const filename = path.join(directory, entry.name);
-    if (entry.isDirectory()) found.push(...await walk(filename, pattern));
-    else if (pattern.test(entry.name)) found.push(filename);
+// Validate rendered pages, not Markdown source: fenced examples are not directives,
+// and draft/stale posts are not part of the production site.
+export function validateRenderedAnimations(html, slug) {
+  const missing = html.match(/<aside\b[^>]*\bdata-animation-source="([^"]*)"/);
+  if (missing) {
+    throw new Error(`Missing rendered animation for ${missing[1]} (${slug}). Run \`npm run anim\` locally and commit the output.`);
   }
-  return found;
 }
 
-function animationOptions(raw = '') {
-  return {
-    scene: raw.match(/(?:^|\s)--scene\s+([\w.]+)(?=\s|$)/)?.[1] ?? null,
-    quality: raw.match(/(?:^|\s)--quality\s+([lmh])(?=\s|$)/)?.[1] ?? 'm',
-  };
-}
-
-async function validateAnimations(postsRoot) {
-  for (const markdownPath of await walk(postsRoot, /index\.mdx?$/)) {
-    const markdown = await readFile(markdownPath, 'utf8');
-    const frontmatter = markdown.match(/^---\s*\n([\s\S]*?)\n---/)?.[1] ?? '';
-    if (/^draft:\s*true\s*$/m.test(frontmatter)) continue;
-    const postRoot = path.dirname(markdownPath);
-    const resourcesRoot = path.join(postRoot, 'resources');
-    const manifest = JSON.parse(await readFile(path.join(resourcesRoot, 'animations.json'), 'utf8').catch(() => '{"entries":{}}'));
-    for (const match of markdown.matchAll(/^#animation\s+(\S+)(?:\s+(.*))?$/gm)) {
-      const options = animationOptions(match[2]);
-      const sourcePath = path.resolve(postRoot, match[1]);
-      const source = await readFile(sourcePath).catch(() => null);
-      const relative = path.relative(resourcesRoot, sourcePath).split(path.sep).join('/');
-      const key = `${relative}|scene=${options.scene ?? ''}|quality=${options.quality}`;
-      const entry = manifest.entries?.[key];
-      const sourceHash = source && createHash('sha256').update(source).digest('hex');
-      const valid = sourceHash && entry?.sourceHash === sourceHash
-        && (await stat(path.join(resourcesRoot, entry.webm ?? '')).catch(() => null))?.isFile()
-        && (await stat(path.join(resourcesRoot, entry.poster ?? '')).catch(() => null))?.isFile();
-      if (!valid) {
-        console.error(`Missing rendered animation for ${match[1]}. Run \`npm run anim\` locally and commit the output.`);
-        process.exit(1);
-      }
-    }
+export async function validateAnimationAssets(html, resources) {
+  const videos = [...html.matchAll(/<video\b[^>]*data-animation-key="([^"]+)"[^>]*>[\s\S]*?<\/video>/g)];
+  if (!videos.length) return;
+  const manifest = JSON.parse(await readFile(path.join(resources, 'animations.json'), 'utf8').catch(() => '{"entries":{}}'));
+  // Markdown may have been cached since the Python source last changed. Always
+  // recheck the actual files at build time, even if rendering reused cached HTML.
+  for (const [video, encodedKey] of videos) {
+    const key = decodeURIComponent(encodedKey);
+    const relative = key.slice(0, key.lastIndexOf('|scene='));
+    const sourcePath = path.resolve(resources, relative);
+    if (!sourcePath.startsWith(`${resources}${path.sep}`)) throw new Error('Animation source must stay inside its post resources.');
+    const source = await readFile(sourcePath).catch(() => null);
+    const entry = manifest.entries?.[key];
+    const valid = source && entry?.sourceHash === createHash('sha256').update(source).digest('hex')
+      && (await stat(path.join(resources, entry.webm ?? '')).catch(() => null))?.isFile()
+      && (await stat(path.join(resources, entry.poster ?? '')).catch(() => null))?.isFile()
+      && video.includes(`/${encodeURIComponent(entry.webm)}"`)
+      && video.includes(`/${encodeURIComponent(entry.poster)}"`);
+    if (!valid) throw new Error(`Missing rendered animation for ./resources/${relative}. Run \`npm run anim\` locally and commit the output.`);
   }
 }
 
@@ -112,7 +99,16 @@ export default function contentResources() {
         const output = fileURLToPath(dir);
         const posts = await readdir(postsRoot, { withFileTypes: true }).catch(() => []);
         for (const post of posts.filter((entry) => entry.isDirectory())) {
+          // The generated page is the source of truth for publication. Never ship
+          // raw code or animation files belonging to draft/stale posts.
+          const html = await readFile(path.join(output, 'posts', `${post.name}.html`), 'utf8').catch((error) => {
+            if (error.code === 'ENOENT') return null;
+            throw error;
+          });
+          if (html === null) continue;
+          validateRenderedAnimations(html, post.name);
           const resources = path.join(postsRoot, post.name, 'resources');
+          await validateAnimationAssets(html, resources);
           if (!(await stat(resources).catch(() => null))?.isDirectory()) continue;
           const entries = await readdir(resources, { recursive: true, withFileTypes: true });
           const rawTarget = path.join(output, 'raw', post.name);
@@ -132,9 +128,6 @@ export default function contentResources() {
             }
           }
         }
-      },
-      'astro:build:start': async () => {
-        await validateAnimations(postsRoot);
       },
     },
   };

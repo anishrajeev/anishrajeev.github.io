@@ -53,19 +53,22 @@ export default function remarkAnimation() {
       if (sourcePath !== resourcesRoot && !sourcePath.startsWith(`${resourcesRoot}${path.sep}`)) {
         throw new Error(`#animation path must stay inside this post's resources folder: ${match[1]}`);
       }
-      const source = await readFile(sourcePath);
-      const sourceHash = createHash('sha256').update(source).digest('hex');
+      const source = await readFile(sourcePath).catch((error) => {
+        if (error.code === 'ENOENT') return null;
+        throw error;
+      });
+      const sourceHash = source && createHash('sha256').update(source).digest('hex');
       const relative = path.relative(resourcesRoot, sourcePath).split(path.sep).join('/');
       const key = `${relative}|scene=${options.scene ?? ''}|quality=${options.quality}`;
       const entry = manifest.entries?.[key];
-      const valid = entry && entry.sourceHash === sourceHash
+      const valid = sourceHash && entry && entry.sourceHash === sourceHash
         && await exists(path.join(resourcesRoot, entry.webm))
         && await exists(path.join(resourcesRoot, entry.poster));
 
       if (!valid) {
         tree.children[index] = {
           type: 'html',
-          value: `<aside class="animation-missing"><strong>Animation not rendered yet.</strong><br>Run <code>npm run anim</code> to render <code>${escapeHtml(match[1])}</code>.</aside>`,
+          value: `<aside class="animation-missing" data-animation-source="${escapeHtml(match[1])}"><strong>Animation not rendered yet.</strong><br>Run <code>npm run anim</code> to render <code>${escapeHtml(match[1])}</code>.</aside>`,
         };
         continue;
       }
@@ -74,7 +77,7 @@ export default function remarkAnimation() {
       const assetBase = `/anim/${encodeURIComponent(slug)}/`;
       tree.children[index] = {
         type: 'html',
-        value: `<figure class="animation"><video autoplay muted loop playsinline preload="${preload}" poster="${assetBase}${encodeURIComponent(entry.poster)}" width="${entry.width}" height="${entry.height}"><source src="${assetBase}${encodeURIComponent(entry.webm)}" type="video/webm"></video><img class="animation__reduced" src="${assetBase}${encodeURIComponent(entry.poster)}" alt="Animation poster frame" width="${entry.width}" height="${entry.height}"></figure>`,
+        value: `<figure class="animation"><video data-animation-key="${encodeURIComponent(key)}" autoplay muted loop playsinline preload="${preload}" poster="${assetBase}${encodeURIComponent(entry.poster)}" width="${entry.width}" height="${entry.height}"><source src="${assetBase}${encodeURIComponent(entry.webm)}" type="video/webm"></video><img class="animation__reduced" src="${assetBase}${encodeURIComponent(entry.poster)}" alt="Animation poster frame" width="${entry.width}" height="${entry.height}"></figure>`,
       };
       animationIndex += 1;
     }

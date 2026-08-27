@@ -1,9 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import { isPostVisible } from '../../../plugins/post-visibility.mjs';
 
 const posts = (await getCollection('posts', ({ data }) =>
-  data.status === 'published' || (!import.meta.env.PROD && data.status === 'draft')
+  isPostVisible(data.status, import.meta.env.PROD)
 ))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---

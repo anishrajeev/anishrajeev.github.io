@@ -1,10 +1,11 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Post from '../../layouts/Post.astro';
+import { isPostVisible } from '../../../plugins/post-visibility.mjs';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) =>
-    data.status === 'published' || (!import.meta.env.PROD && data.status === 'draft')
+    isPostVisible(data.status, import.meta.env.PROD)
   );
 
   return posts.map((post) => ({

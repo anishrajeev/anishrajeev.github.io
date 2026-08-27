@@ -1,18 +1,25 @@
 ---
-const destination = "/posts/intuitive-model-theory.html";
+import { getEntry } from 'astro:content';
+import { isPostVisible } from '../../../plugins/post-visibility.mjs';
+
+const post = await getEntry('posts', 'intuitive-model-theory');
+const visible = post && isPostVisible(post.data.status, import.meta.env.PROD);
+// Preserve the old URL without redirecting public visitors to an unpublished page.
+const destination = visible ? '/posts/intuitive-model-theory.html' : '/posts/posts.html';
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
     <meta http-equiv="refresh" content={`0; url=${destination}`} />
     <link rel="canonical" href={destination} />
     <title>Redirecting…</title>
   </head>
   <body>
     <p>
-      This post has moved. <a href={destination}>Continue to Some Intuitive Concepts in Model Theory</a>.
+      <a href={destination}>{visible ? 'Continue to Some Intuitive Concepts in Model Theory' : 'View published posts'}</a>.
     </p>
   </body>
 </html>
