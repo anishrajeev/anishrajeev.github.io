@@ -1,0 +1,15 @@
+\documentclass[tikz,convert={outfile=\jobname.svg}]{standalone}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+\begin{document}
+    \begin{tikzcd}
+      S && 2 \\
+      \\
+      {F(S)}
+      \arrow["v", from=1-1, to=1-3]
+      \arrow["\eta"', from=1-1, to=3-1]
+      \arrow["{\exists!f_v}"', dashed, from=3-1, to=1-3]
+    \end{tikzcd}
+\end{document}

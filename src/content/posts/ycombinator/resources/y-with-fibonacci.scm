@@ -1,0 +1,11 @@
+((lambda (f)
+  ((lambda (mk-fib)
+    (mk-fib mk-fib))
+   (lambda (fib)
+    (f (lambda (x) ((fib fib) x))))))
+  (lambda (fib)
+    (lambda (n)
+      (cond
+        ((zero? n) 0)
+        ((zero? (- n 1)) 1)
+        (else (+ (fib (- n 1)) (fib (- n 2))))))))

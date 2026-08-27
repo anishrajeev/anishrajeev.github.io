@@ -1,0 +1,5 @@
+(lambda (func)
+  ((lambda (f)
+    (f f))
+   (lambda (f)
+    (func (lambda (x) ((f f) x))))))

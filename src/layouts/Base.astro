@@ -1,0 +1,54 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  banner: string;
+  date?: Date;
+  background?: 'default' | 'error';
+  pageClass?: string;
+}
+
+const {
+  title = "Anish's Awesome Blog",
+  description = 'Ideas, math, computer science, ecology, travel, and more.',
+  banner,
+  date,
+  background = 'default',
+  pageClass,
+} = Astro.props;
+
+const pageTitle = banner === 'Home' ? title : `${banner} · Anish`;
+const formattedDate = date?.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  timeZone: 'UTC',
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <slot name="head" />
+  </head>
+  <body class:list={[pageClass, { 'site-background--error': background === 'error' }]}>
+    <div class="site-scene">
+      <main class="paper">
+        <header class="banner">
+          <h1 class="banner__title">{banner}</h1>
+          {formattedDate && <time datetime={date?.toISOString()}>{formattedDate}</time>}
+        </header>
+        <div class="paper__content">
+          <slot />
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
