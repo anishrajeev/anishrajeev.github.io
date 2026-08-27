@@ -15,25 +15,25 @@ Why do we need to implement recursion? We already have languages that can recurs
 
 Before we get into deriving the YCombinator, we're going to review some Scheme basics incase you don't have any experience with scheme. Scheme has three main datatypes: S-expressions, lists, and atoms. atoms are the base of everything: things like 1, atom(yes atom itself is an atom), water, and book are atoms. Lists are defined as a collection of S-expressions; we denote lists in scheme without commas and with parenthesis. Some examples of lists are: (1 2 3), (atom), (), ((1 2 3) 2 ()), ((1)), and more. Finally, S-expressions are any atoms or lists. So any of the examples I listed above are indeed S-expressions.
 
-To define anonymous functions, we use a list composed of 3 elements: the lambda keyword, a list of formal parameters(the arguments to the function), and the actual function itself. So, an example of the identity function would be:
+To define anonymous functions, we use a list composed of 3 elements: the lambda keyword, a list of formal parameters(the arguments to the function), and the actual function itself. So, an example of the identity function would be
 
 #code ./resources/identity.scm
 
-Function application in scheme is always prefix notation, never infix notation. So an example of a method to add two numbers together would look like:
+Function application in scheme is always prefix notation, never infix notation. So an example of a method to add two numbers together would look like
 
 #code ./resources/add.scm
 
-We can ask questions about certain statements in Scheme. One such question we can ask is **zero?** When put in front of a number, it will evaluate to a boolean depending on whether the number is 0 or not. We use these questions, in addition with the **cond** statement, to control the control flow. The **cond** statement is a list of S-expressions, where the first item(we call this the "car" of the list) is the atom **cond** and the rest of the list(the tail, which in Scheme we call the "cdr" of the list) are pairs(list with two elements) where the first element evaluates to a boolean and the second element is an action to complete. For example, here is the function that says if a number is odd or even:
+We can ask questions about certain statements in Scheme. One such question we can ask is **zero?** When put in front of a number, it will evaluate to a boolean depending on whether the number is 0 or not. We use these questions, in addition with the **cond** statement, to control the control flow. The **cond** statement is a list of S-expressions, where the first item(we call this the "car" of the list) is the atom **cond** and the rest of the list(the tail, which in Scheme we call the "cdr" of the list) are pairs(list with two elements) where the first element evaluates to a boolean and the second element is an action to complete. For example, here is the function that says if a number is odd or even
 
 #code ./resources/even.scm
 
-Finally, since Scheme does support recursion and it is the topic of discussion, here is the Fibonacci sequence in Scheme, using the **define** keyword.
+Finally, since Scheme does support recursion and it is the topic of discussion, here is the Fibonacci sequence in Scheme, using the **define** keyword
 
 ## Derivation
 
-Ok, now that we are through the background section, here is where it gets heavy. Let's look back at the Fibonacci function.
+Ok, now that we are through the background section, here is where it gets heavy. Let's look back at the Fibonacci function
 
-We want to be able to write this function with just anonymous functions(i.e. we want to write this function without using define). Let's attempt to first write fib1(?? is a blank; we don't know what to put there yet), a function that can handle the two base cases only:
+We want to be able to write this function with just anonymous functions(i.e. we want to write this function without using define). Let's attempt to first write fib1(?? is a blank; we don't know what to put there yet), a function that can handle the two base cases only
 
 #code ./resources/fib1.scm
 
