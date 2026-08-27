@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { createRequire } from 'node:module';
 import { mkdtemp, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -8,6 +9,12 @@ import test from 'node:test';
 import contentResources, { validateAnimationAssets, validateRenderedAnimations } from '../plugins/content-resources.mjs';
 import remarkAnimation from '../plugins/remark-animation.mjs';
 import { isPostVisible } from '../plugins/post-visibility.mjs';
+
+test('KaTeX stylesheet and math renderer use the same version', () => {
+  const require = createRequire(import.meta.url);
+  const rendererRequire = createRequire(require.resolve('rehype-katex'));
+  assert.equal(require('katex/package.json').version, rendererRequire('katex/package.json').version);
+});
 
 test('published posts show everywhere, drafts only in dev, stale nowhere', () => {
   assert.equal(isPostVisible('published', false), true);
