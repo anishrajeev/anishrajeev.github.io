@@ -26,6 +26,7 @@ const { Content } = await render(post);
   title={post.data.title}
   date={post.data.date}
   math={post.data.math}
+  unlisted={post.data.status === 'unlisted'}
 >
   <Content />
 </Post>

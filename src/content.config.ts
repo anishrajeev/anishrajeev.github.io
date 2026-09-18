@@ -11,7 +11,7 @@ const posts = defineCollection({
     z.object({
       title: z.string(),
       date: z.coerce.date(),
-      status: z.enum(['published', 'draft', 'stale']).default('draft'),
+      status: z.enum(['published', 'draft', 'unlisted', 'stale']).default('draft'),
       math: z.boolean().default(false),
       hero: image().optional(),
     }),

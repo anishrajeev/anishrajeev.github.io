@@ -197,6 +197,41 @@ code {
   padding-block: 0.25em;
 }
 
+.proof-hidden {
+  margin-block: 1.2em;
+  border: 1px solid rgb(148 131 87 / 0.45);
+  border-radius: 0.25rem;
+  background: rgb(215 193 134 / 0.08);
+}
+
+.proof-hidden > summary {
+  padding: 0.55em 0.7em;
+  color: var(--gold-link);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.proof-hidden > summary:hover,
+.proof-hidden > summary:focus-visible {
+  color: var(--hover-blue);
+}
+
+.proof-hidden[open] > summary {
+  border-bottom: 1px solid rgb(148 131 87 / 0.28);
+}
+
+.proof-hidden__body {
+  padding: 0.75em 0.8em;
+}
+
+.proof-hidden__body > :first-child {
+  margin-top: 0;
+}
+
+.proof-hidden__body > :last-child {
+  margin-bottom: 0;
+}
+
 .post h2,
 .post h3,
 .post h4 {

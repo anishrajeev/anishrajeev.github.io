@@ -35,6 +35,16 @@ const redirect = (await read('posts/intutive_model_theory.html')).match(/url=(\/
 assert.ok(redirect, 'Legacy model theory redirect is missing');
 await read(redirect.slice(1));
 assert.ok(!(await read('sitemap-0.xml')).includes('intutive_model_theory'), 'Redirect should not be indexed');
+const sitemap = await read('sitemap-0.xml');
+const otherIndex = await read('posts.html');
+for (const file of await readdir(path.join(output, 'posts'))) {
+  if (!file.endsWith('.html')) continue;
+  const html = await read(`posts/${file}`);
+  if (!/<meta\b[^>]*name="robots"[^>]*content="noindex"/i.test(html)) continue;
+  const url = `/posts/${file}`;
+  assert.ok(!index.includes(`href="${url}"`) && !otherIndex.includes(`href="${url}"`), `${url} leaked into a public index`);
+  assert.ok(!sitemap.includes(url), `${url} leaked into the sitemap`);
+}
 assert.equal((await read('CNAME')).trim(), 'anish.ink');
 assert.ok((await stat(path.join(output, 'resume.pdf'))).isFile());
 await assert.rejects(stat(path.join(output, 'rss.xml')), { code: 'ENOENT' });

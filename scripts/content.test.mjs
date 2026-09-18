@@ -8,7 +8,11 @@ import { pathToFileURL } from 'node:url';
 import test from 'node:test';
 import contentResources, { validateAnimationAssets, validateRenderedAnimations } from '../plugins/content-resources.mjs';
 import remarkAnimation from '../plugins/remark-animation.mjs';
-import { isPostVisible } from '../plugins/post-visibility.mjs';
+import remarkProof from '../plugins/remark-proof.mjs';
+import { createMarkdownProcessor } from '@astrojs/markdown-remark';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import { isPostVisible, isPostListed } from '../plugins/post-visibility.mjs';
 
 test('KaTeX stylesheet and math renderer use the same version', () => {
   const require = createRequire(import.meta.url);
@@ -26,6 +30,16 @@ test('published posts show everywhere, drafts only in dev, stale nowhere', () =>
   assert.equal(isPostVisible(undefined, true), false);
 });
 
+test('unlisted posts are reachable everywhere but listed only locally', () => {
+  for (const production of [false, true]) {
+    assert.equal(isPostVisible('unlisted', production), true);
+    assert.equal(isPostListed('unlisted', production), !production);
+    assert.equal(isPostListed('published', production), true);
+    assert.equal(isPostListed('draft', production), !production);
+    assert.equal(isPostListed('stale', production), false);
+  }
+});
+
 // Fixtures live outside the repository. These tests never remove project directories.
 async function fixture() {
   const root = await mkdtemp(path.join(os.tmpdir(), 'anish-content-test-'));
@@ -39,6 +53,67 @@ async function fixture() {
 }
 
 const paragraph = (value) => ({ type: 'paragraph', children: [{ type: 'text', value }] });
+
+test('compact proof inside a list renders as a dropdown containing formatted math and prose', async () => {
+  const processor = await createMarkdownProcessor({
+    remarkPlugins: [remarkMath, remarkProof], rehypePlugins: [rehypeKatex],
+  });
+  const { code } = await processor.render(String.raw`- Reflexivity
+   #proof-hidden Proof that homotopy is reflexive
+   Use **the constant homotopy** $H(s,t)=\gamma(t)$.
+   #end-proof
+- Symmetric
+- Transitivity`);
+  assert.match(code, /<li>Reflexivity\s*<details class="proof-hidden">/);
+  assert.match(code, /<summary>Proof that homotopy is reflexive<\/summary>/);
+  assert.match(code, /<div class="proof-hidden__body">[\s\S]*<strong>the constant homotopy<\/strong>[\s\S]*class="katex"[\s\S]*<\/div><\/details>\s*<\/li>/);
+  assert.match(code, /<li>Symmetric<\/li>\s*<li>Transitivity<\/li>/);
+  assert.doesNotMatch(code, /#proof-hidden|#end-proof|<script\b|<details[^>]*\bopen\b/);
+});
+
+test('proofs support headings, display math, multiple blocks and blockquotes', async () => {
+  const processor = await createMarkdownProcessor({
+    remarkPlugins: [remarkMath, remarkProof], rehypePlugins: [rehypeKatex],
+  });
+  const { code } = await processor.render(String.raw`#proof-hidden
+
+### Reflexivity
+
+$$
+\begin{aligned}
+H(0,t)&=\gamma(t)\\
+H(1,t)&=\gamma(t)
+\end{aligned}
+$$
+
+#end-proof
+
+> #proof-hidden Another proof
+> A short proof with *emphasis*.
+> #end-proof`);
+  assert.match(code, /<summary>Proof<\/summary>/);
+  assert.match(code, /<h3[^>]*>Reflexivity<\/h3>/);
+  assert.match(code, /class="katex-display"/);
+  assert.match(code, /<blockquote>\s*<details/);
+  assert.match(code, /<em>emphasis<\/em>/);
+  assert.equal((code.match(/<details\b/g) ?? []).length, 2);
+  assert.doesNotMatch(code, /katex-error|#end-proof|#proof-hidden/);
+});
+
+test('hidden proof directives are validated and ignored inside code', () => {
+  assert.throws(
+    () => remarkProof()({ type: 'root', children: [paragraph('#proof-hidden Reflexivity')] }),
+    /missing its closing #end-proof/,
+  );
+  assert.throws(
+    () => remarkProof()({ type: 'root', children: [paragraph('#end-proof')] }),
+    /no matching #proof-hidden/,
+  );
+  const tree = { type: 'root', children: [{ type: 'code', value: '#proof-hidden Example\n#end-proof' }] };
+  const before = structuredClone(tree);
+  remarkProof()(tree);
+  assert.deepEqual(tree, before);
+});
 
 test('missing source is a dev placeholder and fails production validation clearly', async () => {
   const { posts } = await fixture();

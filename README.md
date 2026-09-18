@@ -16,6 +16,12 @@ Saving the Markdown refreshes the browser. New posts start with `status: draft`;
 `status: published` when they are ready to appear in production. Use `status: stale` to keep a post
 in the repository while hiding it from both development and production.
 
+To share an unfinished post, use `status: unlisted` and push to `main`. It is available at
+`https://anish.ink/posts/<folder-name>.html`, but excluded from the public posts list and sitemap,
+with a `noindex` instruction for search engines. It still appears in your local dev list.
+Anyone with the link can read it; this is not password protection. Later, switch to `published`
+to list it publicly, or back to `draft` to remove the hosted page on the next deployment.
+
 Put a post's images and source files in its neighboring `resources/` folder. Ordinary images use
 normal Markdown:
 
@@ -44,6 +50,45 @@ import CayleyGraph from '../../../components/math/CayleyGraph.svelte';
 
 Set `math: true` in frontmatter, then use `$x^2$` or `$$x^2$$`. KaTeX renders during the build, so
 math posts do not need browser JavaScript. Add shared commands in `src/styles/katex-macros.js`.
+
+For a collapsible proof, put these directives on their own lines. Everything between them is
+ordinary Markdown, including headings, math, code, and images:
+
+```md
+#proof-hidden Proof that homotopy is transitive
+
+Proof goes here. Suppose $F \simeq G$ and $G \simeq H$...
+
+#end-proof
+```
+
+The text after `#proof-hidden` is the dropdown label; omit it to use “Proof”. Proofs are collapsed
+initially and use the browser's native dropdown, so they add no JavaScript.
+
+Proofs also work inside a list item. Indent the proof to match the list item's content;
+blank lines around the directives are optional:
+
+```md
+- Reflexivity
+  #proof-hidden Proof that homotopy is reflexive
+  Use the constant homotopy $H(s,t)=\gamma(t)$.
+  #end-proof
+- Symmetry
+```
+
+Keep each directive on its own line and close it in the same list item or block where it starts.
+
+For equations aligned at `=`, use a display-math block with `aligned` and place `&` before the
+alignment point. End each row with `\\`:
+
+```latex
+$$
+\begin{aligned}
+f(x) &= x^2 + 1 \\
+     &= (x+i)(x-i) + 2
+\end{aligned}
+$$
+```
 
 Fenced code is best for short fragments. To embed a real file without duplicating it:
 
@@ -85,7 +130,7 @@ The sitemap is generated during the build; there is no RSS feed.
 
 ## Where things live
 
-- `src/content/posts/`: the posts you edit, each with its own resources. Only published posts'
+- `src/content/posts/`: the posts you edit, each with its own resources. Only published and unlisted posts'
   pages and raw resources are copied into the production build. Drafts are not private on GitHub.
 - `src/layouts/`, `src/styles/`: shared layout and appearance; no styling to copy between posts.
 - `src/assets/`: shared background photos and fonts. `public/`: the deployed CNAME and résumé.

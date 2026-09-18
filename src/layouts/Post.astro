@@ -6,13 +6,15 @@ interface Props {
   title: string;
   date: Date;
   math?: boolean;
+  unlisted?: boolean;
 }
 
-const { title, date, math = false } = Astro.props;
+const { title, date, math = false, unlisted = false } = Astro.props;
 ---
 
 <Base title={title} banner={title} date={date}>
   {math && <link slot="head" rel="stylesheet" href={katexStylesheet} />}
+  {unlisted && <meta slot="head" name="robots" content="noindex" />}
   <article class="post">
     <slot />
   </article>
