@@ -1,7 +1,7 @@
 ---
 title: "One Original Thought"
 date: 2026-10-10
-status: unlisted
+status: published
 math: false
 ---
 
