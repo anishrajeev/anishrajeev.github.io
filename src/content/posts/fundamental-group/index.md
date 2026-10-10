@@ -99,8 +99,6 @@ This is called the fundamental group
 #### **Back to $S^1$**
 We return to $S^1$ with some tools to analyze what the actual *distinct* loops on $S^1$ look like. How do we even go about calculating $\pi_1(S^1, (1, 0))$? Well, let us first look at it intuitively. 
 
-## FIX THIS; FIRST ESTABLISH THE TRIVIALNESS OF NON SMOOTH PATHS
-Let us first establish that any backtracking doesn't matter. If the ant travels 
-
 If I gave you one loop, $\gamma_0(s) := (1, 0)$, where the ant stays at $(1, 0)$ all day, and another, $\gamma_1(s) := (\cos(2\pi s), \sin(2\pi s))$, where the ant does a smooth counter-clockwise walk on $S^1$, the intuition should ideally be that $\gamma_0 \nsim \gamma_1$. There seems to be something (namely the giant hole in the center) obstructing the ability for $\gamma_1$ to move *continuously* into $\gamma_0$!
-The same thing applies for $\gamma_2 := (\cos(4\pi s), \sin(4\pi s))$. It seems like there is no way that $\gamma_2 \sim \gamma_1$. So, as a first guess, we should guess that for any given 
+The same thing applies for $\gamma_2 := (\cos(4\pi s), \sin(4\pi s))$. It seems like there is no way that $\gamma_2 \sim \gamma_1$.
+So before we can prove that this is actually true, I feel that it is probably productive to take it at face value and try to see what this tells us. Well, first off, the real fact that this intuition was trying to communicate is that $\pi_1(S^1) \cong \mathbb{Z}$. Wrapping counter clockwise $n$ whole rotations sends that loop to $n$, and clockwise sends it to $-n$. One way we can kind of think of this is let us unwrap the circle into $\mathbb{R}$.
