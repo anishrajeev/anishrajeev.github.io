@@ -150,6 +150,9 @@ The sitemap is generated during the build; there is no RSS feed.
   pages and raw resources are copied into the production build. Drafts are not private on GitHub.
 - `src/layouts/`, `src/styles/`: shared layout and appearance; no styling to copy between posts.
 - `src/assets/`: shared background photos and fonts. `public/`: the deployed CNAME and résumé.
+- `public/resources/`: permanent asset URLs embedded by other websites. Keep the Stone Space
+  image under `functor_network/` at its existing path; the Functor Network post depends on it.
+  This public copy is independent of the model-theory draft's self-contained resources.
 - `plugins/`, `scripts/`: Markdown directives and author tools.
 - `photos/`: the original photo collection, intentionally preserved. Post-local copies let you
   move a post together with its pictures.

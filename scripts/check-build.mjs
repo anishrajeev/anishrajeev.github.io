@@ -55,8 +55,13 @@ for (const file of await readdir(path.join(output, 'posts'))) {
 }
 assert.equal((await read('CNAME')).trim(), 'anish.ink');
 assert.ok((await stat(path.join(output, 'resume.pdf'))).isFile());
+// Functor Network embeds this exact URL. Preserve it even while the local post is a draft.
+const stoneSpacePath = 'resources/functor_network/model_theory_stone_space_drawing.png';
+const stoneSpaceImage = await readFile(path.join(output, stoneSpacePath));
+assert.deepEqual(stoneSpaceImage.subarray(0, 8), Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), 'Hosted Stone Space resource must be a PNG');
+assert.deepEqual(stoneSpaceImage, await readFile(path.join('public', stoneSpacePath)), 'Build must preserve the externally embedded Stone Space image');
 await assert.rejects(stat(path.join(output, 'rss.xml')), { code: 'ENOENT' });
 await read('index.html');
 await read('posts.html');
 await read('404.html');
-console.log('Build checks passed: three migrated posts, date order, no draft labels or orphan raw resources, zero post JS, scrollable code, legacy URLs, CNAME, résumé, and no RSS.');
+console.log('Build checks passed: three migrated posts, date order, no draft labels or orphan raw resources, zero post JS, scrollable code, legacy URLs, externally embedded image, CNAME, résumé, and no RSS.');
