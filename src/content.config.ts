@@ -12,6 +12,10 @@ const posts = defineCollection({
       title: z.string(),
       date: z.coerce.date(),
       status: z.enum(['published', 'draft', 'unlisted', 'stale']).default('draft'),
+      externalUrl: z.string().url().refine(
+        (url) => ['https:', 'http:'].includes(new URL(url).protocol),
+        'External posts must use an http:// or https:// URL',
+      ).optional(),
       math: z.boolean().default(false),
       hero: image().optional(),
     }),

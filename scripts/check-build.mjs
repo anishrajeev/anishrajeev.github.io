@@ -37,6 +37,14 @@ await read(redirect.slice(1));
 assert.ok(!(await read('sitemap-0.xml')).includes('intutive_model_theory'), 'Redirect should not be indexed');
 const sitemap = await read('sitemap-0.xml');
 const otherIndex = await read('posts.html');
+const modelTheoryLink = 'href="https://functor.network/user/3255/entry/1404"';
+for (const listing of [index, otherIndex]) {
+  assert.equal(listing.split(modelTheoryLink).length - 1, 1, 'External model theory link must appear exactly once');
+  assert.ok(listing.indexOf(modelTheoryLink) < listing.indexOf('href="/posts/trip_report_s25.html"'), 'External post must respect newest-first ordering');
+  assert.ok(!listing.includes('href="/posts/intuitive-model-theory.html"'), 'Local model theory draft must remain unpublished');
+}
+await assert.rejects(stat(path.join(output, 'posts/model-theory-external.html')), { code: 'ENOENT' });
+assert.ok(!sitemap.includes('model-theory-external'), 'External entries should not create local sitemap pages');
 for (const file of await readdir(path.join(output, 'posts'))) {
   if (!file.endsWith('.html')) continue;
   const html = await read(`posts/${file}`);

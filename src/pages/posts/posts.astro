@@ -14,7 +14,7 @@ const posts = (await getCollection('posts', ({ data }) =>
     <ul>
       {posts.map((post) => (
         <li>
-          <a href={`/posts/${post.id}.html`}>{post.data.title}</a>
+          <a href={post.data.externalUrl ?? `/posts/${post.id}.html`}>{post.data.title}</a>
           {post.data.status === 'draft' && <small class="draft-label">(draft)</small>}
           {post.data.status === 'unlisted' && <small class="draft-label">(unlisted)</small>}
         </li>

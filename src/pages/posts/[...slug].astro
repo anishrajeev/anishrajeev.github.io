@@ -5,7 +5,7 @@ import { isPostVisible } from '../../../plugins/post-visibility.mjs';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) =>
-    isPostVisible(data.status, import.meta.env.PROD)
+    !data.externalUrl && isPostVisible(data.status, import.meta.env.PROD)
   );
 
   return posts.map((post) => ({

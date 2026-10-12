@@ -22,6 +22,22 @@ with a `noindex` instruction for search engines. It still appears in your local 
 Anyone with the link can read it; this is not password protection. Later, switch to `published`
 to list it publicly, or back to `draft` to remove the hosted page on the next deployment.
 
+For a post hosted elsewhere, make a normal post folder with just this in `index.md`:
+
+```yaml
+---
+title: Some Intuitive Concepts in Model Theory
+date: 2025-10-02
+status: published
+externalUrl: https://functor.network/user/3255/entry/1404
+---
+```
+
+It joins the same date-sorted list and links directly to the external site; no local article page
+is generated. Draft/stale visibility still applies. The imported model-theory draft remains
+separate in `intuitive-model-theory`; when publishing that local version, mark the external entry
+`stale` to avoid listing it twice.
+
 Put a post's images and source files in its neighboring `resources/` folder. Ordinary images use
 normal Markdown:
 
